@@ -11,10 +11,14 @@ export async function injectSourcesContent(
   map.sourcesContent = []
   await Promise.all(
     map.sources.map(async (sourcePath, i) => {
-      map.sourcesContent![i] = await fs.readFile(
-        path.resolve(sourceRoot, decodeURI(sourcePath)),
-        'utf-8'
-      )
+      try {
+        map.sourcesContent![i] = await fs.readFile(
+          path.resolve(sourceRoot, decodeURI(sourcePath)),
+          'utf-8'
+        )
+      } catch (err) {
+        map.sourcesContent![i] = null
+      }
     })
   )
 }
